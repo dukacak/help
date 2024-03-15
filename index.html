@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>graphite</title>
+    </head>
+    <body>
+        <h1>
+            The Code is below
+        </h1>
+        <pre>
+        import pygame
+        import os
+        
+        WIDTH, HEIGHT= 500, 500
+        WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("the best platformer for sure")
+        FPS = 60
+        
+        def drawwindow(x,y,objs):
+            if x >= WIDTH:
+                ofset = WIDTH
+            else:
+                ofset = 0
+            WIN.fill((255, 255, 255))
+            #water
+            pygame.draw.rect(WIN,(0,0,255), (0,450,500,500))
+            #ground
+            pygame.draw.rect(WIN, (255,0,0),(objs[0][0]-ofset,objs[0][1],objs[0][2],objs[0][3]))
+            pygame.draw.rect(WIN, (255,0,0),(objs[1][0]-ofset,objs[1][1],objs[1][2],objs[1][3]))
+            #wall
+            pygame.draw.rect(WIN, (255,0,0),(250-ofset,0,10,70))
+            #player
+            pygame.draw.circle(WIN, (0,0,0), (x-ofset, y), radius=10)
+            pygame.draw.circle(WIN, (225,225,0), (x-ofset, y), radius=10, draw_top_right= True, draw_bottom_left=True)
+            pygame.display.update()
+        
+        
+        def main():
+            objs = [[100,200,100,10],[300,200,500,10]]
+            ObjsCount = 2
+            fall = True
+            x=150
+            y=0
+            yvel=0
+            xvel=0
+            lhc=0
+            rhc=0
+            uhc=0
+            dhc=0
+            clock = pygame.time.Clock()
+            run = True
+            while run:
+                clock.tick(FPS)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                #movement - ignore me
+                keys_pressed = pygame.key.get_pressed()
+                if keys_pressed[pygame.K_a]:
+                    if not xvel <=-2:
+                        xvel-=2
+                elif keys_pressed[pygame.K_d]:
+                    if not xvel >=2:
+                        xvel+=2
+                else:
+                    xvel = 0
+                if fall == False:
+                    if keys_pressed[pygame.K_SPACE]:
+                        yvel-=2
+                    else:
+                        y = 191 
+                #fall - ignore me
+                current_check=-0
+        
+                # start
+        
+                while current_check <=ObjsCount:
+                    fxc = objs[(current_check)]+int(objs[(current_check)][1])
+                    if x <= fxc and x >= objs[current_check][0]:
+                        if y+11 <= objs[current_check][3]+1 or y+10 >= objs[current_check][3]:
+                            fall = True
+                        else:
+                            fall = False
+                    else:
+                        current_check +=1      
+                        fall = True
+                
+                # end
+                        
+                #yvel stuff -ignore me
+                #walls - ignore me
+                if x+10 >= 251 and x+10 <= 260:
+                    if y <= 70 and xvel >=1:
+                        xvel = 0    
+                if x-10 >= 250 and x-10 <= 259:
+                    if y <= 70 and xvel <=-1:
+                        xvel = 0              
+        
+                #velocity apply - ignore me
+                y+=yvel
+                x+=xvel
+                
+                #ded - ignorem me
+                if y+10 >= 450:
+                    x=150
+                    y=0
+                    yvel=0
+                    xvel=0
+        
+                drawwindow(x,y,objs)
+        
+        
+            pygame.quit()
+        
+        main()
+        </pre>
+    </body>
+</html>
